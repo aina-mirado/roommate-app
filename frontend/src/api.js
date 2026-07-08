@@ -33,3 +33,7 @@ export const addDepense = (colocataire_id, nom_produit, prix, description) =>
 export const getDashboard = () => api.get("/api/dashboard").then((r) => r.data);
 
 export const getHistorique = () => api.get("/api/historique").then((r) => r.data);
+
+export const deleteRiz = (id) => api.delete(`/api/riz/${id}`).then((r) => r.data);
+
+export const deleteDepense = (id) => api.delete(`/api/depenses/${id}`).then((r) => r.data);

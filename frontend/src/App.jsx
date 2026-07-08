@@ -19,7 +19,7 @@ export default function App() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-10 py-6 md:py-10">
           {page === "ajout" && <Ajout onChanged={triggerRefresh} />}
           {page === "dashboard" && <Dashboard refreshTick={refreshTick} />}
-          {page === "historique" && <Historique refreshTick={refreshTick} />}
+          {page === "historique" && <Historique refreshTick={refreshTick} onChanged={triggerRefresh} />}
         </div>
       </main>
     </div>

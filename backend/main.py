@@ -143,10 +143,7 @@ def dashboard(db: Session = Depends(get_db)):
         totaux_argent[c.id] = float(total_argent)
 
     min_riz = min(totaux_riz.values())
-    min_argent = min(totaux_argent.values())
-
-    print("Valeur de min_riz:", min_riz)
-    print("Valeur de min_argent:", min_argent)    
+    min_argent = min(totaux_argent.values())   
 
     resultats = []
     for c in colocataires:
@@ -154,7 +151,7 @@ def dashboard(db: Session = Depends(get_db)):
         solde_argent = round(totaux_argent[c.id] - min_argent, 2)
 
         if solde_riz > 0:
-            msg_riz = f"{c.nom} a {solde_riz} kg d'avance sur le riz par rapport aux autres."
+            msg_riz = f"{c.nom} a {solde_riz} kp d'avance sur le riz par rapport aux autres."
         else:
             msg_riz = f"{c.nom} est à jour pour le riz."
 
@@ -162,6 +159,8 @@ def dashboard(db: Session = Depends(get_db)):
             msg_argent = f"{c.nom} doit recevoir {solde_argent:,.0f} Ar des autres colocataires.".replace(",", " ")
         else:
             msg_argent = f"{c.nom} est à jour pour les dépenses."
+
+
 
         resultats.append(schemas.SoldeColocataire(
             colocataire_id=c.id,
@@ -188,6 +187,7 @@ def historique(db: Session = Depends(get_db)):
     riz_history = [
         {
             "id": r.id,
+            "colocataire_id": r.colocataire_id,
             "nom": r.colocataire.nom if r.colocataire else "Inconnu",
             "image_path": r.colocataire.image_path if r.colocataire else None,
             "kg": r.kg,
@@ -199,6 +199,7 @@ def historique(db: Session = Depends(get_db)):
     dep_history = [
         {
             "id": d.id,
+            "colocataire_id": d.colocataire_id,
             "nom": d.colocataire.nom if d.colocataire else "Inconnu",
             "image_path": d.colocataire.image_path if d.colocataire else None,
             "nom_produit": d.nom_produit,
@@ -211,6 +212,25 @@ def historique(db: Session = Depends(get_db)):
 
     return {"riz": riz_history, "depenses": dep_history}
 
+
+@app.delete("/api/riz/{riz_id}")
+def supprimer_riz(riz_id: int, db: Session = Depends(get_db)):
+    riz = db.query(models.RizContribution).get(riz_id)
+    if not riz:
+        raise HTTPException(status_code=404, detail="Entrée de riz introuvable.")
+    db.delete(riz)
+    db.commit()
+    return {"ok": True}
+
+
+@app.delete("/api/depenses/{depense_id}")
+def supprimer_depense(depense_id: int, db: Session = Depends(get_db)):
+    depense = db.query(models.Depense).get(depense_id)
+    if not depense:
+        raise HTTPException(status_code=404, detail="Dépense introuvable.")
+    db.delete(depense)
+    db.commit()
+    return {"ok": True}
 
 @app.get("/api/health")
 def health():

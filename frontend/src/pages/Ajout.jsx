@@ -94,7 +94,6 @@ export default function Ajout({ onChanged }) {
     <div className="space-y-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-widest text-grain-600 font-semibold mb-1">Page 1</p>
           <h1 className="font-display text-3xl text-forest-700">Ajouter une participation</h1>
           <p className="text-forest-700/60 text-sm mt-1">Enregistrez le riz apporté ou une dépense courante du foyer.</p>
         </div>

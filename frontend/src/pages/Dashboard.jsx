@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { UserPlus, Wheat, Coins, User, Loader2 } from "lucide-react";
-import { getDashboard } from "../api.js";
+import { UserPlus, Wheat, Coins, User, Loader2, Trash2 } from "lucide-react";
+import { getDashboard, deleteColocataire } from "../api.js";
 import { imageUrl } from "../api.js";
 import ColocataireModal from "../components/ColocataireModal.jsx";
 
@@ -23,6 +23,17 @@ export default function Dashboard({ refreshTick }) {
     }
   };
 
+  const handleDeleteColocataire = async (id, nom) => {
+    if (window.confirm(`Êtes-vous sûr de vouloir supprimer ${nom} ?`)) {
+      try {
+        await deleteColocataire(id);
+        charger();
+      } catch (error) {
+        console.error("Erreur lors de la suppression:", error);
+      }
+    }
+  };
+
   useEffect(() => {
     charger();
   }, [refreshTick]);
@@ -31,10 +42,9 @@ export default function Dashboard({ refreshTick }) {
     <div className="space-y-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-widest text-grain-600 font-semibold mb-1">Page 2</p>
           <h1 className="font-display text-3xl text-forest-700">Tableau de bord</h1>
           <p className="text-forest-700/60 text-sm mt-1">
-            Le solde le plus bas de chaque catégorie est ramené à zéro ; les autres montrent leur avance.
+            compte commence par zéro: 
           </p>
         </div>
         <button
@@ -62,18 +72,27 @@ export default function Dashboard({ refreshTick }) {
       <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
         {soldes.map((s) => (
           <div key={s.colocataire_id} className="bg-panel rounded-xl2 shadow-card border border-forest-50 p-6 animate-rise">
-            <div className="flex items-center gap-3 mb-5">
-              <span className="w-14 h-14 rounded-full overflow-hidden bg-forest-100 flex items-center justify-center shrink-0 ring-2 ring-forest-50">
-                {s.image_path ? (
-                  <img src={imageUrl(s.image_path)} alt={s.nom} className="w-full h-full object-cover" />
-                ) : (
-                  <User size={22} className="text-forest-400" />
-                )}
-              </span>
-              <div>
-                <h3 className="font-display text-lg text-forest-700 leading-tight">{s.nom}</h3>
-                <p className="text-xs text-forest-700/50">Colocataire</p>
+            <div className="flex items-start justify-between gap-3 mb-5">
+              <div className="flex items-center gap-3">
+                <span className="w-14 h-14 rounded-full overflow-hidden bg-forest-100 flex items-center justify-center shrink-0 ring-2 ring-forest-50">
+                  {s.image_path ? (
+                    <img src={imageUrl(s.image_path)} alt={s.nom} className="w-full h-full object-cover" />
+                  ) : (
+                    <User size={22} className="text-forest-400" />
+                  )}
+                </span>
+                <div>
+                  <h3 className="font-display text-lg text-forest-700 leading-tight">{s.nom}</h3>
+                  {/* <p className="text-xs text-forest-700/50">Colocataire</p> */}
+                </div>
               </div>
+              <button
+                onClick={() => handleDeleteColocataire(s.colocataire_id, s.nom)}
+                className="p-2 text-forest-700/50 hover:text-berry-500 hover:bg-berry-50 rounded-lg transition-colors shrink-0"
+                title="Supprimer"
+              >
+                <Trash2 size={18} />
+              </button>
             </div>
 
             <div className="grain-divider rounded-full mb-5" />
@@ -85,11 +104,11 @@ export default function Dashboard({ refreshTick }) {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-forest-700/70">Total riz</span>
-                    <span className="text-sm font-semibold text-forest-700">{s.total_riz_kg} kp</span>
+                    <span className="text-sm text-forest-700/70">Riz</span>
+                    <span className="text-sm font-semibold text-forest-700">{s.solde_riz} kp</span>
                   </div>
                   <p className={`text-xs mt-0.5 ${s.solde_riz > 0 ? "text-grain-600 font-medium" : "text-forest-700/40"}`}>
-                    {s.message_riz}
+                    Total {s.total_riz_kg} kp
                   </p>
                 </div>
               </div>
@@ -100,11 +119,11 @@ export default function Dashboard({ refreshTick }) {
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-forest-700/70">Total dépenses</span>
-                    <span className="text-sm font-semibold text-forest-700">{formatAr(s.total_argent)}</span>
+                    <span className="text-sm text-forest-700/70"> Dépenses</span>
+                    <span className="text-sm font-semibold text-forest-700">{formatAr(s.solde_argent)}</span>
                   </div>
                   <p className={`text-xs mt-0.5 ${s.solde_argent > 0 ? "text-berry-500 font-medium" : "text-forest-700/40"}`}>
-                    {s.message_argent}
+                    Total: {formatAr(s.total_argent)} 
                   </p>
                 </div>
               </div>

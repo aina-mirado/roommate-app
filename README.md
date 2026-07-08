@@ -19,10 +19,7 @@ roommate-app/
   courante (produit, prix, note) pour un colocataire, avec bouton d'ajout de colocataire
   (nom + photo obligatoire).
 - **Page 2 — Tableau de bord** : une carte par colocataire affichant son total de riz,
-  son total de dépenses, et son solde par rapport aux autres. Le colocataire ayant le
-  moins contribué est toujours à zéro ; les autres affichent leur avance
-  (ex. si Mahefa=3000 Ar, Mirado=2000 Ar, Maminiaina=1000 Ar → affichés
-  Mahefa=2000 Ar, Mirado=1000 Ar, Maminiaina=0 Ar).
+  son total de dépenses, et son solde par rapport aux autres.
 - **Page 3 — Historique** : deux listes séparées (riz / dépenses) avec date précise,
   nom du colocataire et détails de chaque entrée.
 
