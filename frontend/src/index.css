@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  background-color: #F5F6F2;
+  color: #182420;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #5F9384 transparent;
+}
+
+@keyframes riseIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-rise {
+  animation: riseIn 0.35s ease-out both;
+}
+
+.grain-divider {
+  background-image: radial-gradient(circle, #D9A441 1px, transparent 1.5px);
+  background-size: 10px 10px;
+  height: 3px;
+  opacity: 0.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-rise { animation: none; }
+}

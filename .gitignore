@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/.venv/
+.venv/
+venv/
+env/
+
+# Build outputs
+frontend/dist/
+frontend/build/
+dist/
+build/
+
+# Python cache and artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Local uploads and data
+backend/uploads/*
+!backend/uploads/.gitkeep
+*.sqlite3
+*.db
+
+# Logs and editor files
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# SSL certificates
+certs/*.pem
+certs/*.key
